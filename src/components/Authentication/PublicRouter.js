@@ -5,7 +5,7 @@ import { Redirect } from "react-router-dom";
 
 const PrivateRouter = ({component:Component,...rest,history}) => {
   const userType = useSelector(
-    (state) => state.Authentication.user.type
+    (state) => state.authentication.user.type
   );
   return (
     <Route

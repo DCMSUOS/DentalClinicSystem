@@ -3,21 +3,21 @@ import { Route } from "../../Router";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 
-const AdminRouter = ({ component: Component, ...rest }) => {
+const DoctorRouters = ({ component: Component, ...rest }) => {
   const userType = useSelector((state) => state.authentication.user.type);
 
   return (
     <Route
       {...rest}
       render={(props) =>
-        userType === "Admin" ? (
+        userType === "Doctor" ? (
           <Component {...props} />
         ) : (
-          <Redirect to="/admin" />
+          <Redirect to="/doctor" />
         )
       }
     />
   );
 };
 
-export default AdminRouter;
+export default DoctorRouters;

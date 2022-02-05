@@ -5,7 +5,7 @@ import { Redirect } from "react-router-dom";
 
 const PrivateRouter = ({ component: Component, ...rest }) => {
   const isAuthenticate = useSelector(
-    (state) => state.Authentication.isAuthenticate
+    (state) => state.authentication.isAuthenticate
   );
   return (
     <Route

@@ -1,0 +1,177 @@
+@font-face {
+    font-family: "BebasNeue-Bold";
+    src: url("./Fonts/BebasNeue-Bold.otf");
+  }
+  @font-face {
+    font-family: "BebasNeue-Book";
+    src: url("./Fonts/BebasNeue-Book.otf");
+  }
+  @font-face {
+    font-family: "BebasNeue-Light";
+    src: url("./Fonts/BebasNeue-Light.otf");
+  }
+  @font-face {
+    font-family: "BebasNeue-Regular";
+    src: url("./Fonts/BebasNeue-Regular.otf");
+  }
+  @font-face {
+    font-family: "BebasNeue-Thin";
+    src: url("./Fonts/BebasNeue-Thin.otf");
+  }
+  @font-face {
+    font-family: "Montserrat-Bold";
+    src: url("./Fonts/Montserrat-Bold.ttf");
+  }
+  @font-face {
+    font-family: "Montserrat-Light";
+    src: url("./Fonts/Montserrat-Light.ttf");
+  }
+  @font-face {
+    font-family: "Montserrat-Regular";
+    src: url("./Fonts/Montserrat-Regular.ttf");
+  }
+  @font-face {
+    font-family: "Montserrat-Medium";
+    src: url("./Fonts/Montserrat-Medium.ttf");
+  }
+  @font-face {
+    font-family: "Rudaw-Regular";
+    src: url("./Fonts/rudawregular2.ttf");
+  }
+  @font-face {
+    font-family: "Slate-Pro";
+    src: url("./Fonts/SlatePro.ttf");
+  }
+  * {
+    outline: none;
+    font-family: "Montserrat-Regular";
+  }
+  html,
+  body,
+  #root,
+  #root > div {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    font-family: "Montserrat-Regular";
+  }
+  
+  body::-webkit-scrollbar {
+    width: 17px;
+  }
+  body::-webkit-scrollbar-track {
+    background: white;
+  }
+  body::-webkit-scrollbar-thumb {
+    background-color: #292929;
+    border: 3px solid white;
+  }
+  
+  .navLink {
+    display: flex;
+    color: #fff;
+    /* font-size: 18px; */
+    text-decoration: none;
+    /* font-family: "Slate-Pro"; */
+    padding: 8px;
+    letter-spacing: 0.8px;
+    transition: all 0.3s;
+    margin-top: 20px;
+    align-items: center;
+  }
+  .navLink:hover {
+    background-color: #ffffff71;
+  }
+  
+  .navLinkActive {
+    display: flex;
+    color: #fff;
+    /* font-size: 18px; */
+    background-color: rgba(255, 255, 255, 0.315);
+    text-decoration: none;
+    /* font-family: "Slate-Pro"; */
+    padding: 8px;
+    letter-spacing: 0.8px;
+  }
+  
+  .coachProfileUpdate {
+    display: flex;
+    height: 100%;
+    background: #fff;
+  }
+  
+  .championshipHandlerDate {
+    height: 40px;
+    font-size: 12px;
+    width: 100%;
+    font-family: "Montserrat-Regular";
+    border-radius: 20px;
+    background-color: #f0f0f0;
+    border-width: 0px;
+  }
+  
+  .RequestScreen {
+    display: flex;
+    height: 100%;
+    background: #f6f6f6;
+  }
+  
+  .AcceptRequestBtnContainer {
+    background-color: #e4e4e4af;
+    height: 30px;
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 25px;
+    transition: all 0.3s;
+    color: #52796f;
+    justify-content: center;
+    align-items: center;
+  }
+  .AcceptRequestBtnContainer:hover {
+    background-color: #e4e4e457;
+    color: #ccc;
+  }
+  
+  .UpdateProfileBtn {
+    color: #fff;
+    font-family: "Montserrat-Regular";
+    font-size: 11px;
+    padding: 8px;
+    background-color: #5768ee;
+    margin-top: 16px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background-color 0.4s;
+  }
+  .UpdateProfileBtn:hover {
+    background-color: #2e3780;
+  }
+  
+  .line-oblique {
+    width: 28px;
+    height: 28px;
+    position: relative;
+  }
+  
+  .line-oblique::after {
+    content: "";
+    position: absolute;
+    border-top: 2px solid red;
+    width: 40px;
+    transform: rotate(-45deg);
+    transform-origin: 0% 0%;
+  }
+  
+  table {
+    border-spacing: 0;
+    border: 1px solid black;
+  }
+  
+  th,
+  td {
+    margin: 0;
+    padding: 0.5rem;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+  }
+  
