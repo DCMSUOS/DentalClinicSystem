@@ -9,6 +9,9 @@ import "./App.css";
 import firebase from "./db/firebase";
 
 import authenticationReducer from "./store/reducer/authenticationReducer";
+import featuresReducer from "./store/reducer/featuresReducer";
+import patientReducer from "./store/reducer/patientReducer";
+
 import { LOGOUT, startGetUserData } from "./store/action/authenticationAction";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -16,6 +19,8 @@ const middleware = [thunk];
 
 const appReducer = combineReducers({
   authentication: authenticationReducer,
+  features: featuresReducer,
+  patients: patientReducer,
 });
 
 const rootReducer = (state, action) => {

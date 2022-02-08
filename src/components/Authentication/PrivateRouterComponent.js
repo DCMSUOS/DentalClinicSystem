@@ -9,7 +9,7 @@ const PrivateRouter = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(props) =>
-        (user.type === "Admin" && <Redirect to="/admin" />) ||
+        (user.type === "Admin" && <Redirect to="/dashboard" />) ||
         (user.type === "Doctor" && <Redirect to="/doctor" />)
       }
     />
