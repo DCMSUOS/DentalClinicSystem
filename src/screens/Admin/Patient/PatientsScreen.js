@@ -5,6 +5,7 @@ import { fontFamily, fontSize } from "../../../assets/FontStyleConfig";
 import Header from "../../../components/UI/Admin/PatientList/Header";
 import PatientList from "../../../components/UI/Admin/PatientList/PatientList";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 const { height, width } = Dimensions.get("window");
 
@@ -25,9 +26,11 @@ const PatientsScreen = () => {
     if (AllPateints) setUpData();
   }, [AllPateints]);
 
+  const history = useHistory();
+
   const onPressAddPateint = () => {
-    
-  }
+    history.push(`patients/addPatients`);
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: Colors.lightBackgroundColor }}>
