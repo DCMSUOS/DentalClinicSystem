@@ -13,3 +13,41 @@ export const fetchAllPateints = () => {
       });
   };
 };
+
+export const addPatient = (patient) => {
+  return async (dispatch) => {
+    await firebase
+      .firestore()
+      .collection("Patients")
+      .doc(patient.id)
+      .set({ ...patient });
+  };
+};
+
+export const fetchAllAppointments = () => {
+  return async (dispatch) => {
+    let data = [];
+    await firebase
+      .firestore()
+      .collection("Appointments")
+      .onSnapshot(async (querysnapshot) => {
+        data = querysnapshot.docs.map((doc) => doc.data());
+        console.log(data);
+        dispatch({ type: "SET_APPOINTMENTS", data });
+      });
+  };
+};
+
+export const addAppointment = (appointment) => {
+  return async () => {
+    try {
+      await firebase
+        .firestore()
+        .collection("Appointments")
+        .doc(appointment.id)
+        .set({ ...appointment });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+};

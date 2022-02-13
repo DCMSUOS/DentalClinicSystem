@@ -1,4 +1,4 @@
-const initialState = { patients: [] };
+const initialState = { patients: [], appointments: [] };
 
 const authenticationReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -6,6 +6,11 @@ const authenticationReducer = (state = initialState, action) => {
       return {
         ...state,
         patients: action.data,
+      };
+    case "SET_APPOINTMENTS":
+      return {
+        ...state,
+        appointments: action.data,
       };
 
     default:
