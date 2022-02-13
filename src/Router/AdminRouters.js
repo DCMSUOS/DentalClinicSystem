@@ -9,7 +9,7 @@ import ServideDetailsScreen from "../screens/Admin/Features/ServideDetailsScreen
 import DoctorsScreen from "../screens/Admin/Features/DoctorsScreen";
 import PatientsScreen from "../screens/Admin/Patient/PatientsScreen";
 import AddPatientScreen from "../screens/Admin/Patient/AddPatientScreen";
-
+import PatientDetailsScreen from "../screens/Admin/Patient/PatientDetailsScreen";
 
 export default function AdminRouters() {
   return (
@@ -25,7 +25,16 @@ export default function AdminRouters() {
       />
       <AdminRouter path="/features/doctors" exact component={DoctorsScreen} />
       <AdminRouter path="/patients" exact component={PatientsScreen} />
-      <AdminRouter path="/addPatients" exact component={AddPatientScreen} />
+      <AdminRouter
+        path="/patients/addPatients"
+        exact
+        component={AddPatientScreen}
+      />
+      <AdminRouter
+        path="/patients/:id"
+        exact
+        component={PatientDetailsScreen}
+      />
     </>
   );
 }

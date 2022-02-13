@@ -13,7 +13,6 @@ const DoctorsScreen = () => {
 
     data = allAdmins.filter((a) => a.type === "Doctor");
 
-    console.log(allAdmins);
 
     setAllDoctors(data);
   };

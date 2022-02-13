@@ -1,11 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+
 import {
   fetchAllDoctors,
   fetchAllServices,
 } from "../../store/action/featuresAction";
-import { useDispatch } from "react-redux";
-import { fetchAllPateints } from "../../store/action/patientAction";
+import { fetchAllAppointments, fetchAllPateints } from "../../store/action/patientAction";
 
 const DashboardScreen = () => {
   const dispatch = useDispatch();
@@ -15,6 +16,7 @@ const DashboardScreen = () => {
       await dispatch(fetchAllServices());
       await dispatch(fetchAllDoctors());
       await dispatch(fetchAllPateints());
+      await dispatch(fetchAllAppointments());
     } catch (e) {
       console.log(e);
     }
