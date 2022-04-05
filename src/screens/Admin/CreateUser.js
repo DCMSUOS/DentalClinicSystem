@@ -5,7 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Colors from "../../assets/color/Colors";
 
 import { BsFillPersonFill } from "react-icons/bs";
@@ -18,12 +18,14 @@ const accountTypes = [
   { label: "Doctor", type: 1 },
 ];
 
-const CreateUser = () => {
+const CreateUser = (props) => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [type, setType] = useState("");
+
+  let data = props.location.state.data;
 
   const onChangeEmail = (val) => {
     setEmail(val);
@@ -56,6 +58,21 @@ const CreateUser = () => {
       console.log(e);
     }
   };
+
+  const setUpData = () => {
+    onChangeEmail(data.email);
+    onChangeFirstName(data.firstname);
+    onChangeLastName(data.lastname);
+    let typeLabel = accountTypes.find((a) => a.label === data.type);
+    console.log(typeLabel)
+    if (typeLabel) onChangeType(typeLabel.type);
+  };
+
+  useEffect(() => {
+    if (data) {
+      setUpData();
+    }
+  }, [data]);
 
   return (
     <View

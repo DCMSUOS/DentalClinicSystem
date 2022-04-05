@@ -15,6 +15,7 @@ export default function AdminRouters() {
   return (
     <>
       <AdminRouter path="/dashboard" exact component={DashboardScreen} />
+      <AdminRouter path="/reports" exact component={DashboardScreen} />
       <AdminRouter path="/createUser" exact component={CreateUser} />
       <AdminRouter path="/features" exact component={MainFeatures} />
       <AdminRouter path="/features/services" exact component={ServicesScreen} />
@@ -24,6 +25,7 @@ export default function AdminRouters() {
         component={ServideDetailsScreen}
       />
       <AdminRouter path="/features/doctors" exact component={DoctorsScreen} />
+      <AdminRouter path="/features/admins" exact component={DoctorsScreen} />
       <AdminRouter path="/patients" exact component={PatientsScreen} />
       <AdminRouter
         path="/patients/addPatients"

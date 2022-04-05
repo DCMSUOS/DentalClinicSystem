@@ -8,6 +8,7 @@ import {
 import React from "react";
 import { IoIosList } from "react-icons/io";
 import { FaUsers } from "react-icons/fa";
+import { MdAdminPanelSettings } from "react-icons/md";
 
 import Colors from "../../../assets/color/Colors";
 
@@ -42,6 +43,9 @@ const Container = ({ history }) => {
       </Card>
       <Card onPress={() => history.push("/features/doctors")} title="Doctors">
         <FaUsers color={"#fe3a59"} size={40} />
+      </Card>
+      <Card onPress={() => history.push("/features/admins")} title="Admins">
+        <MdAdminPanelSettings color={"#fe3a59"} size={40} />
       </Card>
     </View>
   );

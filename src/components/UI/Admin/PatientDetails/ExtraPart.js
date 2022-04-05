@@ -12,34 +12,25 @@ const ExtraPart = ({
   appointmentToView,
   newAppointment,
   onChangeNewAppointmentData,
+  onChangeAppointmentData,
   patientId,
+  onViwingAppointment,
+  loading,
+  changeLoading,
 }) => {
-  const [data, setData] = useState([]);
-
-  const setUpData = async () => {};
-
-  useEffect(() => {
-    if (selectedExtraType !== -1) setUpData();
-  }, [selectedExtraType]);
-
-  if (selectedExtraType === 0 && newAppointment) {
+  if (selectedExtraType !== -1)
     return (
       <AddAppointment
-        data={newAppointment}
+        data={selectedExtraType === 0 ? newAppointment : appointmentToView}
         onChangeNewAppointmentData={onChangeNewAppointmentData}
+        onChangeAppointmentData={onChangeAppointmentData}
+        selectedExtraType={selectedExtraType}
         patientId={patientId}
+        onViwingAppointment={onViwingAppointment}
+        loading={loading}
+        changeLoading={changeLoading}
       />
     );
-  }
-  if (selectedExtraType === -1) {
-    return (
-      <AddAppointment
-        data={appointmentToView}
-        onChangeNewAppointmentData={onChangeNewAppointmentData}
-        patientId={patientId}
-      />
-    );
-  }
 
   return (
     <View
@@ -48,19 +39,14 @@ const ExtraPart = ({
         backgroundColor: "#fff",
         padding: 5,
         marginVertical: 20,
+        alignItems: "center",
+        justifyContent: "center",
         borderRadius: 10,
         height: height / 1.7,
       }}
     >
-      <Text
-        style={{
-          margin: 10,
-          fontFamily: fontFamily("en"),
-          color: "#292929",
-          opacity: 0.5,
-        }}
-      >
-        {selectedExtraType === 0 ? "Add Appointment" : "Appointment"}
+      <Text style={{ fontFamily: fontFamily("en"), opacity: 0.5 }}>
+        Select Appointment To View Details
       </Text>
     </View>
   );

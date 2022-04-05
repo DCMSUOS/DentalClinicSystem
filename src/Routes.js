@@ -11,6 +11,7 @@ import PrivateRouter from "./components/Authentication/PrivateRouter";
 import PrivateRouterComponent from "./components/Authentication/PrivateRouterComponent";
 import AdminRouters from "./Router/AdminRouters";
 import DoctorRouters from "./Router/DoctorsRouters";
+import LoadingScreen from "./screens/LoadingScreen";
 
 export const Routes = (props) => {
   const loading = useSelector((state) => state.authentication.loading);
@@ -18,11 +19,12 @@ export const Routes = (props) => {
 
   return (
     <Router>
-      {!User.isAuthenticate && <Redirect to="/login" />}
-      {!User.isAuthenticate && (
+      {loading && <LoadingScreen />}
+      {!loading && !User.isAuthenticate && <Redirect to="/login" />}
+      {!loading && !User.isAuthenticate && (
         <Route exact path="/login" component={LoginScreen} />
       )}
-      {User.isAuthenticate && (
+      {!loading && User.isAuthenticate && (
         <View
           style={{
             flex: 1,

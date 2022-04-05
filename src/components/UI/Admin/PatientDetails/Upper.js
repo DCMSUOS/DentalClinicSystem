@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import { StyleSheet, Text, View, Dimensions, TextInput } from "react-native";
 import React, { useEffect, useState } from "react";
 import Colors from "../../../../assets/color/Colors";
 import { fontFamily } from "../../../../assets/FontStyleConfig";
@@ -9,7 +9,15 @@ const { height, width } = Dimensions.get("window");
 
 const HEIGHT_OF_CONTAINER = height / 2.2;
 
-const Upper = ({ currentPatient }) => {
+const Upper = ({
+  selectedExtraType,
+  appointmentToView,
+  newAppointment,
+  onChangeNewAppointmentData,
+  onChangeAppointmentData,
+  currentPatient,
+  currentAppointments,
+}) => {
   return (
     <View
       style={{
@@ -19,16 +27,55 @@ const Upper = ({ currentPatient }) => {
         // alignItems: "center",
       }}
     >
-      <ProfileContainer currentPatient={currentPatient} />
+      <ProfileContainer
+        currentPatient={currentPatient}
+        currentAppointments={currentAppointments}
+      />
       <DetailsContainer currentPatient={currentPatient} />
-      <NoteContainer />
+      <NoteContainer
+        selectedExtraType={selectedExtraType}
+        currentPatient={currentPatient}
+        data={
+          selectedExtraType === -1
+            ? () => {}
+            : selectedExtraType === 0
+            ? newAppointment
+            : appointmentToView
+        }
+        onChangeData={
+          selectedExtraType === -1
+            ? currentPatient
+            : selectedExtraType === 0
+            ? onChangeNewAppointmentData
+            : onChangeAppointmentData
+        }
+      />
     </View>
   );
 };
 
 export default Upper;
 
-const ProfileContainer = ({ currentPatient }) => {
+const ProfileContainer = ({ currentPatient, currentAppointments }) => {
+  const [counter, setCounter] = useState(false);
+
+  const setUpData = () => {
+    let post = currentAppointments.filter((a) => a.date < moment().valueOf());
+
+    let upComing = currentAppointments.filter(
+      (a) => a.date > moment().valueOf()
+    );
+
+    setCounter({
+      post: post ? post.length : 0,
+      upComing: upComing ? upComing.length : 0,
+    });
+  };
+  useEffect(() => {
+    if (currentAppointments) {
+      setUpData();
+    }
+  }, [currentAppointments]);
   return (
     <View
       style={{
@@ -92,50 +139,54 @@ const ProfileContainer = ({ currentPatient }) => {
           alignItems: "center",
         }}
       >
-        <View style={{ alignItems: "center" }}>
-          <Text
-            style={{
-              fontFamily: fontFamily("en", "Montserrat-Bold"),
-              color: "#292929",
-              textTransform: "capitalize",
-              marginBottom: 5,
-              opacity: 0.5,
-            }}
-          >
-            Post
-          </Text>
-          <Text
-            style={{
-              fontFamily: fontFamily("en"),
-              color: "#292929",
-              textTransform: "capitalize",
-            }}
-          >
-            {13}
-          </Text>
-        </View>
-        <View style={{ alignItems: "center" }}>
-          <Text
-            style={{
-              fontFamily: fontFamily("en", "Montserrat-Bold"),
-              color: "#292929",
-              textTransform: "capitalize",
-              marginBottom: 5,
-              opacity: 0.5,
-            }}
-          >
-            Upcoming
-          </Text>
-          <Text
-            style={{
-              fontFamily: fontFamily("en"),
-              color: "#292929",
-              textTransform: "capitalize",
-            }}
-          >
-            {13}
-          </Text>
-        </View>
+        {counter && (
+          <View style={{ alignItems: "center" }}>
+            <Text
+              style={{
+                fontFamily: fontFamily("en", "Montserrat-Bold"),
+                color: "#292929",
+                textTransform: "capitalize",
+                marginBottom: 5,
+                opacity: 0.5,
+              }}
+            >
+              Post
+            </Text>
+            <Text
+              style={{
+                fontFamily: fontFamily("en"),
+                color: "#292929",
+                textTransform: "capitalize",
+              }}
+            >
+              {counter.post}
+            </Text>
+          </View>
+        )}
+        {counter && (
+          <View style={{ alignItems: "center" }}>
+            <Text
+              style={{
+                fontFamily: fontFamily("en", "Montserrat-Bold"),
+                color: "#292929",
+                textTransform: "capitalize",
+                marginBottom: 5,
+                opacity: 0.5,
+              }}
+            >
+              Upcoming
+            </Text>
+            <Text
+              style={{
+                fontFamily: fontFamily("en"),
+                color: "#292929",
+                textTransform: "capitalize",
+              }}
+            >
+              {counter.upComing}
+            </Text>
+          </View>
+        )}
       </View>
     </View>
   );
@@ -224,7 +275,11 @@ const DetailsContainer = ({ currentPatient }) => {
   );
 };
 
-const NoteContainer = () => {
+const NoteContainer = ({ data, onChangeData, selectedExtraType }) => {
+  const onChangeText = (val) => {
+    onChangeData(1, val);
+  };
+
   return (
     <View
       style={{
@@ -256,20 +311,20 @@ const NoteContainer = () => {
         </Text>
       </View>
       <View style={styles.noteContentContainer}>
-        <Text
+        <TextInput
+          multiline
+          onChangeText={onChangeText}
           style={{
+            height: "100%",
+            width: "100%",
             fontFamily: fontFamily("en"),
             color: "#292929",
             fontSize: 13,
             opacity: 0.9,
-            lineHeight: 20
+            lineHeight: 20,
           }}
-        >
-          is simply dummy text of the printing and typesetting industry. Lorem
-          Ipsum has been the industry's standard dummy text ever since the
-          1500s, when an unknown printer took a galley of type and scrambled it
-          to make a type specimen book. It has survived not only five centuries,
-        </Text>
+          value={data.note || ""}
+        />
       </View>
     </View>
   );

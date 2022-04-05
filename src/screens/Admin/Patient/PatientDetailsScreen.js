@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Modal } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Colors from "../../../assets/color/Colors";
@@ -16,11 +16,13 @@ const PatientDetailsScreen = (props) => {
   const [currentPatient, setCurrentPatient] = useState(false);
   const [currentAppointments, setCurrentAppointments] = useState(false);
   const [appointmentToView, setAppointmentToView] = useState(false);
-  const AllPateints = useSelector((state) => state.patients);
+  const [loading, setLoading] = useState(false);
+
   const [selectedExtraType, setSelectedExtraType] = useState(-1);
   const [newAppointment, setNewAppointment] = useState(false);
 
   const id = props.match.params.id;
+  const AllPateints = useSelector((state) => state.patients);
 
   const setUpCurrentPatient = () => {
     let findCurrentPatient = AllPateints.patients.find((a) => a.id === id);
@@ -60,10 +62,9 @@ const PatientDetailsScreen = (props) => {
 
     let dt = {
       doctorId: "oh2brPypbRNE1nPXef1KTrkMYkD2",
-      date: "",
+      date: moment().valueOf(),
       setvice: [],
       numberId: id,
-      
     };
 
     setNewAppointment(dt);
@@ -75,8 +76,31 @@ const PatientDetailsScreen = (props) => {
     if (type === 0) {
       dt.date = val;
     }
+    if (type === 1) {
+      dt.note = val;
+    }
 
     setNewAppointment({ ...dt });
+  };
+
+  const onChangeAppointmentData = (type, val) => {
+    let dt = { ...appointmentToView };
+
+    if (type === 0) {
+      dt.date = moment(val).valueOf();
+      if (dt.sitType === 3) {
+        dt.sitType = 0;
+      }
+    }
+    if (type === 1) {
+      dt.note = val;
+    }
+
+    setAppointmentToView(dt);
+  };
+
+  const changeLoading = (val) => {
+    setLoading(val);
   };
 
   useEffect(() => {
@@ -89,7 +113,15 @@ const PatientDetailsScreen = (props) => {
     >
       {currentPatient && currentAppointments && (
         <View style={{ width: "100%", padding: 20, marginBottom: 50 }}>
-          <Upper currentPatient={currentPatient} />
+          <Upper
+            currentPatient={currentPatient}
+            appointmentToView={appointmentToView}
+            currentAppointments={currentAppointments}
+            newAppointment={newAppointment}
+            selectedExtraType={selectedExtraType}
+            onChangeNewAppointmentData={onChangeNewAppointmentData}
+            onChangeAppointmentData={onChangeAppointmentData}
+          />
           <Schedule
             currentPatient={currentPatient}
             selectedExtraType={selectedExtraType}
@@ -99,7 +131,10 @@ const PatientDetailsScreen = (props) => {
             appointmentToView={appointmentToView}
             newAppointment={newAppointment}
             onChangeNewAppointmentData={onChangeNewAppointmentData}
+            onChangeAppointmentData={onChangeAppointmentData}
             patientId={id}
+            loading={loading}
+            changeLoading={changeLoading}
           />
         </View>
       )}

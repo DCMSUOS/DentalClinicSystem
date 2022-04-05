@@ -38,11 +38,11 @@ export const store = createStore(
 
 let App = () => {
   return (
-    <Provider store={store}>
-      <View style={{ flex: 1 }}>
-        <Routes />
-      </View>
-    </Provider>
+  <Provider store={store}>
+    <View style={{ flex: 1 }}>
+      <Routes />
+    </View>
+  </Provider>
   );
 };
 

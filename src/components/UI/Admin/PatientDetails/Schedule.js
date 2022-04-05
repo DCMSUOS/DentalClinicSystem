@@ -28,7 +28,10 @@ const Schedule = ({
   appointmentToView,
   newAppointment,
   onChangeNewAppointmentData,
+  onChangeAppointmentData,
   patientId,
+  loading,
+  changeLoading,
 }) => {
   const [filterType, setFilterType] = useState(1);
   const [appointments, setAppointments] = useState(false);
@@ -42,9 +45,15 @@ const Schedule = ({
     currentAppointments.forEach((app) => {
       if (filterType === 0) {
         dt.push(app);
-      } else if (filterType === 1 && app.date <= moment().valueOf()) {
+      } else if (
+        filterType === 1 &&
+        moment(app.date).valueOf() > moment().valueOf()
+      ) {
         dt.push(app);
-      } else if (filterType === 2 && app.date > moment().valueOf()) {
+      } else if (
+        filterType === 2 &&
+        moment(app.date).valueOf() < moment().valueOf()
+      ) {
         dt.push(app);
       }
     });
@@ -65,7 +74,6 @@ const Schedule = ({
         width: "100%",
         flexDirection: "row",
         justifyContent: "space-between",
-        // alignItems: "center",
       }}
     >
       <View style={styles.container}>
@@ -76,6 +84,7 @@ const Schedule = ({
         />
         <AppointmentsContainer
           appointments={appointments}
+          loading={loading}
           onViwingAppointment={onViwingAppointment}
         />
       </View>
@@ -84,8 +93,11 @@ const Schedule = ({
         appointmentToView={appointmentToView}
         newAppointment={newAppointment}
         onChangeNewAppointmentData={onChangeNewAppointmentData}
+        onChangeAppointmentData={onChangeAppointmentData}
         patientId={patientId}
-        appointmentToView={appointmentToView}
+        onViwingAppointment={onViwingAppointment}
+        loading={loading}
+        changeLoading={changeLoading}
       />
     </View>
   );
@@ -149,7 +161,11 @@ const Filter = ({ filterType, onChangeFilterType, onPressAddAppointment }) => {
   );
 };
 
-const AppointmentsContainer = ({ appointments, onViwingAppointment }) => {
+const AppointmentsContainer = ({
+  appointments,
+  onViwingAppointment,
+  loading,
+}) => {
   return (
     <View style={styles.appointmentsContainer}>
       <ScrollView
@@ -165,6 +181,7 @@ const AppointmentsContainer = ({ appointments, onViwingAppointment }) => {
                 key={d.id}
                 appointment={d}
                 onViwingAppointment={onViwingAppointment}
+                loading={loading}
               />
             );
           })
@@ -187,7 +204,7 @@ const AppointmentsContainer = ({ appointments, onViwingAppointment }) => {
   );
 };
 
-const AppointmentItem = ({ appointment, onViwingAppointment }) => {
+const AppointmentItem = ({ appointment, onViwingAppointment, loading }) => {
   const [currentDoctor, setCurrentDoctor] = useState(false);
 
   const onPress = () => {
@@ -199,25 +216,46 @@ const AppointmentItem = ({ appointment, onViwingAppointment }) => {
       style={styles.appointmentIndex}
       onPress={onPress}
       activeOpacity={0.7}
+      disabled={loading}
     >
       <View>
         <Text
           style={{
             fontFamily: fontFamily("en", "Montserrat-Light"),
             color: "#292929",
-            fontSize: 25,
+            fontSize: 20,
             opacity: 0.7,
           }}
         >
-          {moment(appointment.date).format(`DD MMM'YY`)}
+          {moment(appointment.date).fromNow()}
         </Text>
       </View>
       <LabelIndex
-        label={"Treatment"}
+        label={"Date"}
         value={moment(appointment.date).format(`DD MMM'YY`)}
       />
       <LabelIndex label={"Dentist"} value="Drg. alla" />
-      <LabelIndex label={"Situation"} value="Open" color={"green"} />
+      <LabelIndex
+        label={"Situation"}
+        value={
+          appointment.sitType === 0
+            ? "Pending"
+            : appointment.sitType === 1
+            ? "Open"
+            : appointment.sitType === 2
+            ? "Done"
+            : "Close"
+        }
+        color={
+          appointment.sitType === 0
+            ? Colors.orangeColor
+            : appointment.sitType === 1
+            ? Colors.blueColor
+            : appointment.sitType === 2
+            ? Colors.greenColor
+            : Colors.redColor
+        }
+      />
     </TouchableOpacity>
   );
 };

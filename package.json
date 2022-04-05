@@ -10,10 +10,13 @@
     "customize-cra": "^1.0.0",
     "customize-cra-react-refresh": "^1.1.0",
     "firebase": "^9.6.6",
+    "modal-enhanced-react-native-web": "^0.2.0",
     "moment": "^2.26.0",
     "nanoid": "^3.2.0",
     "numeral": "^2.0.6",
+    "rc-time-picker": "^3.7.3",
     "react": "^16.13.1",
+    "react-chartjs-2": "^4.0.1",
     "react-date-picker": "^8.4.0",
     "react-datepicker": "^4.6.0",
     "react-dom": "^16.13.1",
@@ -37,6 +40,7 @@
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-scripts eject"
   },
+  "proxy": "http://localhost:5000",
   "eslintConfig": {
     "extends": "react-app"
   },

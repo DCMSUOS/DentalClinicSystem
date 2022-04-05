@@ -3,16 +3,24 @@ import React, { useEffect, useState } from "react";
 import Colors from "../../../assets/color/Colors";
 import { fontFamily, fontSize } from "../../../assets/FontStyleConfig";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 const DoctorsScreen = () => {
   const [allDoctors, setAllDoctors] = useState(false);
   const allAdmins = useSelector((state) => state.features.admins);
 
+  const history = useHistory();
+
   const setUpAllAdmins = () => {
     let data = [];
 
-    data = allAdmins.filter((a) => a.type === "Doctor");
+    let tp = "Doctor";
 
+    if (history.location.pathname === "/features/admins") {
+      tp = "Admin";
+    }
+
+    data = allAdmins.filter((a) => a.type === tp);
 
     setAllDoctors(data);
   };
@@ -23,8 +31,10 @@ const DoctorsScreen = () => {
     }
   }, [allAdmins]);
 
-  const onPressAddAdmins = () => {};
-  
+  const onPressAddAdmins = (val) => {
+    history.push(`/createUser`, { data: val });
+  };
+
   return (
     <View
       style={{
@@ -61,7 +71,7 @@ const DoctorsScreen = () => {
 
 const IndexItem = ({ doctor, onPressAddAdmins, isLast }) => {
   const onPress = () => {
-    onPressAddAdmins(doctor.id);
+    onPressAddAdmins(doctor);
   };
   return (
     <TouchableOpacity

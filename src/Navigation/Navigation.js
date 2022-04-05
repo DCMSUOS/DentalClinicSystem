@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, Text, View, Image } from "react-native";
 import { Link, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { FiLogOut } from "react-icons/fi";
@@ -50,7 +50,18 @@ const BadgeContainer = () => {
         textDecoration: "none",
       }}
     >
-      <Text style={styles.badgeTextContainer}>DCMS</Text>
+      <View>
+        <Image
+          source={{ uri: "https://i.ibb.co/DL7NwN9/logo-1.png" }}
+          style={{
+            height: 60,
+            width: 40,
+            alignSelf: "center",
+            tintColor: "#fff",
+            transform: [{scale: 1.4}]
+          }}
+        />
+      </View>
     </NavLink>
   );
 };

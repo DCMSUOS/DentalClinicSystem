@@ -32,7 +32,6 @@ export const fetchAllAppointments = () => {
       .collection("Appointments")
       .onSnapshot(async (querysnapshot) => {
         data = querysnapshot.docs.map((doc) => doc.data());
-        console.log(data);
         dispatch({ type: "SET_APPOINTMENTS", data });
       });
   };
@@ -49,5 +48,33 @@ export const addAppointment = (appointment) => {
     } catch (e) {
       console.log(e);
     }
+  };
+};
+
+
+export const updateDuration = (type, value) => {
+  return (dispatch, getState) => {
+    let obj = getState().patients.duration;
+
+    if (type === 0) {
+      obj.startDate = value;
+
+      if (obj.startDate > obj.endDate) {
+        obj.endDate = value;
+      }
+    } else if (type === 1) {
+      obj.endDate = value;
+
+      if (obj.endDate < obj.startDate) {
+        obj.startDate = value;
+      }
+    } else if (type === 2) {
+      obj = value;
+    }
+
+    dispatch({
+      type: "UPDATE_DURATION",
+      data: { ...obj },
+    });
   };
 };

@@ -3,20 +3,22 @@ import React from "react";
 import { fontFamily, fontSize } from "../../assets/FontStyleConfig";
 import { NavLink } from "react-router-dom";
 import { FaUserTie } from "react-icons/fa";
+import { MdSpaceDashboard, MdOutlineMoreHoriz } from "react-icons/md";
+import { ImUsers } from "react-icons/im";
+import { HiDocumentReport } from "react-icons/hi";
 
 const AdminNavigation = () => {
   return (
     <View>
-
       <NavLink
         className="navLink"
         activeClassName="navLinkActive"
         style={style}
         to="/dashboard"
       >
-        <FaUserTie
+        <MdSpaceDashboard
           color="#fff"
-          size={19}
+          size={22}
           style={{ marginLeft: 10, marginRight: 10 }}
         />
         {"Dashboard"}
@@ -26,42 +28,40 @@ const AdminNavigation = () => {
         className="navLink"
         activeClassName="navLinkActive"
         style={style}
-        to="/createUser"
-      >
-        <FaUserTie
-          color="#fff"
-          size={19}
-          style={{ marginLeft: 10, marginRight: 10 }}
-        />
-        {"Create User"}
-      </NavLink>
-
-      <NavLink
-        className="navLink"
-        activeClassName="navLinkActive"
-        style={style}
         to="/patients"
       >
-        <FaUserTie
+        <ImUsers
           color="#fff"
-          size={19}
+          size={21}
           style={{ marginLeft: 10, marginRight: 10 }}
         />
         {"Patients List"}
       </NavLink>
-
+      <NavLink
+        className="navLink"
+        activeClassName="navLinkActive"
+        style={style}
+        to="/reports"
+      >
+        <HiDocumentReport
+          color="#fff"
+          size={23}
+          style={{ marginLeft: 10, marginRight: 10 }}
+        />
+        {"Reports"}
+      </NavLink>
       <NavLink
         className="navLink"
         activeClassName="navLinkActive"
         style={style}
         to="/features"
       >
-        <FaUserTie
+        <MdOutlineMoreHoriz
           color="#fff"
-          size={19}
+          size={24}
           style={{ marginLeft: 10, marginRight: 10 }}
         />
-        {"Features"}
+        {"More"}
       </NavLink>
     </View>
   );

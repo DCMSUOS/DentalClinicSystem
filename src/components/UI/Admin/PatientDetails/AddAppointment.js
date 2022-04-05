@@ -5,8 +5,10 @@ import {
   Dimensions,
   TouchableOpacity,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
+import "rc-time-picker/assets/index.css";
 import DatePicker from "react-date-picker";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,12 +18,21 @@ import { fontFamily } from "../../../../assets/FontStyleConfig";
 import shortid from "shortid";
 import moment from "moment";
 import { addAppointment } from "../../../../store/action/patientAction";
+import { async } from "@firebase/util";
 
 const { height, width } = Dimensions.get("window");
 
-const AddAppointment = ({ data, onChangeNewAppointmentData, patientId }) => {
+const AddAppointment = ({
+  data,
+  onChangeNewAppointmentData,
+  patientId,
+  selectedExtraType,
+  onChangeAppointmentData,
+  onViwingAppointment,
+  loading,
+  changeLoading,
+}) => {
   const [doctor, setDoctor] = useState(false);
-  const [loading, setLoading] = useState(false);
   const allAdmins = useSelector((state) => state.features.admins);
 
   const setUpDoctor = () => {
@@ -44,23 +55,91 @@ const AddAppointment = ({ data, onChangeNewAppointmentData, patientId }) => {
 
   const onAddAppointment = async () => {
     try {
-      setLoading(true);
+      changeLoading(true);
       let dt = {
         ...data,
         id: shortid.generate(),
         createdAt: moment().valueOf(),
-        date: new Date(data.date).valueOf(),
+        date: moment(data.date).valueOf(),
         sitType: 0,
         isDeleted: false,
         services: [{ id: "O4GsvLBQ" }],
         patientId: patientId,
       };
+
+      if (selectedExtraType === 1) {
+        dt = { ...dt, ...data };
+      }
+
       await dispatch(addAppointment(dt));
     } catch (e) {
-      setLoading(false);
+      changeLoading(false);
       console.log(e);
     }
-    setLoading(false);
+    changeLoading(false);
+  };
+
+  const onChangeSitTypeAppointment = async (type) => {
+    try {
+      changeLoading(true);
+      let dt = {
+        ...data,
+      };
+
+      if (selectedExtraType === 1) {
+        dt = { ...dt, ...data };
+      }
+
+      if (type === 3 || type === 2) {
+        dt.date = moment().subtract(10, "minute").valueOf();
+      }
+
+      if (type === 1) {
+        dt.openAt = moment().valueOf();
+      }
+      if (type === 2) {
+        dt.doneAt = moment().valueOf();
+      }
+      if (type === 3) {
+        dt.closeAt = moment().valueOf();
+      }
+
+      if (type === 0 && dt.date < moment().valueOf()) {
+        changeLoading(false);
+        return window.alert("Invalid Date", "Invalid Date");
+      }
+
+      dt = { ...dt, sitType: type };
+
+      await dispatch(addAppointment(dt));
+      await onViwingAppointment(dt.id);
+    } catch (e) {
+      changeLoading(false);
+      console.log(e);
+    }
+    changeLoading(false);
+  };
+
+  const onDeleteAppointment = async () => {
+    try {
+      changeLoading(true);
+      let dt = {
+        ...data,
+      };
+
+      if (selectedExtraType === 1) {
+        dt = { ...dt, ...data };
+      }
+
+      dt = { ...dt, isDeleted: true };
+
+      await dispatch(addAppointment(dt));
+      await onViwingAppointment(dt.id);
+    } catch (e) {
+      changeLoading(false);
+      console.log(e);
+    }
+    changeLoading(false);
   };
 
   return (
@@ -80,10 +159,11 @@ const AddAppointment = ({ data, onChangeNewAppointmentData, patientId }) => {
           <AppointmentDate
             type={0}
             value={data.date}
-            onChangeNewAppointmentData={(val) => {
-              console.log(val);
-              //  data.date = val;
-            }}
+            onChangeNewAppointmentData={
+              selectedExtraType === 0
+                ? onChangeNewAppointmentData
+                : onChangeAppointmentData
+            }
           />
           <ButtonContainer
             type={1}
@@ -91,7 +171,13 @@ const AddAppointment = ({ data, onChangeNewAppointmentData, patientId }) => {
             label={"Doctor"}
           />
           <ButtonContainer type={2} value={"test"} label={"Service"} />
-          <ChoiseContainer onAddAppointment={onAddAppointment} />
+          <ChoiseContainer
+            selectedExtraType={selectedExtraType}
+            data={data}
+            onDeleteAppointment={onDeleteAppointment}
+            onAddAppointment={onAddAppointment}
+            onChangeSitTypeAppointment={onChangeSitTypeAppointment}
+          />
         </View>
       ) : (
         <View
@@ -104,7 +190,13 @@ const AddAppointment = ({ data, onChangeNewAppointmentData, patientId }) => {
   );
 };
 
-const ChoiseContainer = ({ onAddAppointment }) => {
+const ChoiseContainer = ({
+  onAddAppointment,
+  selectedExtraType,
+  data,
+  onChangeSitTypeAppointment,
+  onDeleteAppointment,
+}) => {
   return (
     <View
       style={[
@@ -118,9 +210,52 @@ const ChoiseContainer = ({ onAddAppointment }) => {
         },
       ]}
     >
-      <Button label={"Close"} color={Colors.purple} />
-      <Button label={"Add to queue"} color={Colors.orangeColor} />
-      <Button label={"Delete"} color={Colors.redColor} />
+      {selectedExtraType !== 0 && data.sitType !== 0 && (
+        <Button
+          label={"Back To Pending"}
+          color={Colors.orangeColor}
+          onPress={() => {
+            onChangeSitTypeAppointment(0);
+          }}
+        />
+      )}
+      {selectedExtraType !== 0 && data.sitType !== 1 && (
+        <Button
+          label={"Open"}
+          color={Colors.blueColor}
+          onPress={() => {
+            onChangeSitTypeAppointment(1);
+          }}
+        />
+      )}
+      {selectedExtraType !== 0 && data.sitType !== 2 && (
+        <Button
+          label={"Done"}
+          color={Colors.greenColor}
+          onPress={() => {
+            onChangeSitTypeAppointment(2);
+          }}
+        />
+      )}
+      {selectedExtraType !== 0 && (
+        <Button label={"Add to queue"} color={Colors.orangeColor} />
+      )}
+      {selectedExtraType !== 0 && data.sitType !== 3 && (
+        <Button
+          label={"Close"}
+          color={Colors.redColor}
+          onPress={() => {
+            onChangeSitTypeAppointment(3);
+          }}
+        />
+      )}
+      {selectedExtraType !== 0 && (
+        <Button
+          label={"Delete"}
+          color={Colors.redColor}
+          onPress={onDeleteAppointment}
+        />
+      )}
       <Button
         label={"Save"}
         color={Colors.greenColor}
@@ -164,7 +299,7 @@ const Button = ({ label, onPress, color, fontColor }) => {
 
 const AppointmentDate = ({ type, onChangeNewAppointmentData, value }) => {
   const onChange = (val) => {
-    onChangeNewAppointmentData(val);
+    onChangeNewAppointmentData(type, val);
   };
   return (
     <View style={styles.index}>
@@ -179,10 +314,9 @@ const AppointmentDate = ({ type, onChangeNewAppointmentData, value }) => {
       </Text>
       <DatePicker
         className="react-date-picker"
-        value={value}
+        value={new Date(value)}
         minDate={new Date()}
         onChange={onChange}
-        calendarType="Arabic"
       />
     </View>
   );

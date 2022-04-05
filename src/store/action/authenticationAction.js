@@ -51,7 +51,6 @@ const returnUserData = async (uid) => {
 export const startGetUserData = (uid) => {
   return async (dispatch) => {
     let data = await returnUserData(uid);
-    console.log({ uid });
     try {
       dispatch({
         type: "LOGIN",
@@ -67,6 +66,5 @@ export const createUser = (userData) => {
       .auth()
       .createUserWithEmailAndPassword(userData.email, userData.password);
 
-    console.log(response);
   };
 };

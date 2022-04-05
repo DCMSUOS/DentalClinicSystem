@@ -13,11 +13,11 @@ import Colors from "../../../../assets/color/Colors";
 
 const { height, width } = Dimensions.get("window");
 
-const Header = ({ patients, onPressAddPateint }) => {
+const Header = ({ patients, onPressAddPateint, sortType }) => {
   return (
     <View>
-      <Upper onPressAddPateint={onPressAddPateint} />
-      <Bottom patients={patients} />
+      <Upper onPressAddPateint={onPressAddPateint} sortType={sortType} />
+      <Bottom patients={patients} sortType={sortType} />
     </View>
   );
 };
@@ -97,11 +97,11 @@ const AddButtons = ({ onPressAddPateint }) => {
   );
 };
 
-const Bottom = ({ patients }) => {
+const Bottom = ({ patients, sortType }) => {
   return (
     <View style={styles.container}>
       <Counter length={patients.length} />
-      <Filter />
+      <Filter sortType={sortType} />
     </View>
   );
 };
@@ -132,7 +132,7 @@ const Counter = ({ length }) => {
   );
 };
 
-const Filter = () => {
+const Filter = ({ sortType }) => {
   return (
     <View style={{ flexDirection: "row", alignItems: "center" }}>
       <Text
@@ -165,7 +165,7 @@ const Filter = () => {
             opacity: 0.6,
           }}
         >
-          Last Appointment
+          {sortType.label}
         </Text>
       </View>
     </View>
