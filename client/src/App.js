@@ -13,6 +13,7 @@ import featuresReducer from "./store/reducer/featuresReducer";
 import patientReducer from "./store/reducer/patientReducer";
 
 import { LOGOUT, startGetUserData } from "./store/action/authenticationAction";
+import axios from "axios";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const middleware = [thunk];
