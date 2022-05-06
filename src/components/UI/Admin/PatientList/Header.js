@@ -13,20 +13,35 @@ import Colors from "../../../../assets/color/Colors";
 
 const { height, width } = Dimensions.get("window");
 
-const Header = ({ patients, onPressAddPateint, sortType }) => {
+const Header = ({
+  patients,
+  onPressAddPateint,
+  sortType,
+  onChangeSearchInput,
+  searchInput,
+}) => {
   return (
     <View>
-      <Upper onPressAddPateint={onPressAddPateint} sortType={sortType} />
+      <Upper
+        onPressAddPateint={onPressAddPateint}
+        sortType={sortType}
+        searchInput={searchInput}
+        onChangeSearchInput={onChangeSearchInput}
+      />
       <Bottom patients={patients} sortType={sortType} />
     </View>
   );
 };
 
-const Upper = ({ onPressAddPateint }) => {
+const Upper = ({ onPressAddPateint, onChangeSearchInput, searchInput }) => {
   return (
     <View style={styles.container}>
       <HeaderLabel />
-      <UpperRightContainer onPressAddPateint={onPressAddPateint} />
+      <UpperRightContainer
+        searchInput={searchInput}
+        onPressAddPateint={onPressAddPateint}
+        onChangeSearchInput={onChangeSearchInput}
+      />
     </View>
   );
 };
@@ -47,19 +62,28 @@ const HeaderLabel = () => {
   );
 };
 
-const UpperRightContainer = ({ onPressAddPateint }) => {
+const UpperRightContainer = ({
+  onPressAddPateint,
+  onChangeSearchInput,
+  searchInput,
+}) => {
   return (
     <View style={{ flexDirection: "row", alignItems: "center", width: "20%" }}>
-      <Search />
+      <Search
+        onChangeSearchInput={onChangeSearchInput}
+        searchInput={searchInput}
+      />
       <AddButtons onPressAddPateint={onPressAddPateint} />
     </View>
   );
 };
 
-const Search = () => {
+const Search = ({ onChangeSearchInput, searchInput }) => {
   return (
     <View>
       <TextInput
+        value={searchInput}
+        onChangeText={onChangeSearchInput}
         style={{
           width: "90%",
           height: 40,

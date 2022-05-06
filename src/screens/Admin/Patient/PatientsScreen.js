@@ -14,6 +14,8 @@ const { height, width } = Dimensions.get("window");
 
 const PatientsScreen = () => {
   const [sortType, setSortType] = useState(headerLabel[0]);
+  const [searchInput, setSearchInput] = useState("");
+  const [patientData, setPatientData] = useState(false);
   const AllPateints = useSelector((state) => state.patients.patients);
   const AllAppointments = useSelector((state) => state.patients.appointments);
 
@@ -88,11 +90,35 @@ const PatientsScreen = () => {
     }
 
     setPatients(dt);
+    setPatientData(dt);
   };
 
   const onChangeSortType = (val) => {
     setSortType(val);
   };
+
+  const onSearch = () => {
+    let arrData = [];
+
+    if (sortType.type === 1) {
+      arrData = patientData.filter((pt) => {
+        let phoneNumber = pt.patient.phoneNumber;
+
+        return phoneNumber.indexOf(searchInput) !== -1;
+      });
+    } else
+      arrData = patientData.filter((pt) => {
+        let name = pt.patient.firstname + " " + pt.patient.lastname;
+
+        return name.toLowerCase().indexOf(searchInput.toLowerCase()) !== -1;
+      });
+
+    setPatients(arrData);
+  };
+
+  useEffect(() => {
+    if (patientData && patients) onSearch();
+  }, [searchInput]);
 
   useEffect(() => {
     if (AllPateints && AllAppointments) setUpData();
@@ -104,14 +130,20 @@ const PatientsScreen = () => {
     history.push(`patients/addPatients`);
   };
 
+  const onChangeSearchInput = (val) => {
+    setSearchInput(val);
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: Colors.lightBackgroundColor }}>
       {patients && (
         <View style={{ width: "100%" }}>
           <Header
             sortType={sortType}
+            searchInput={searchInput}
             patients={patients}
             onPressAddPateint={onPressAddPateint}
+            onChangeSearchInput={onChangeSearchInput}
           />
           <PatientList
             onChangeSortType={onChangeSortType}
