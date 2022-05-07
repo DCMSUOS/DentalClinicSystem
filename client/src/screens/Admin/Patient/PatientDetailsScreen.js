@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, Modal } from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Colors from "../../../assets/color/Colors";
@@ -6,23 +6,30 @@ import Upper from "../../../components/UI/Admin/PatientDetails/Upper";
 import Schedule from "../../../components/UI/Admin/PatientDetails/Schedule";
 import { customAlphabet } from "nanoid/async";
 import moment from "moment";
+import Modal from "modal-enhanced-react-native-web";
+import SelectDoctorsModal from "../../../components/UI/Admin/PatientDetails/SelectDoctorsModal";
+import SelectServiceModal from "../../../components/UI/Admin/PatientDetails/SelectServiceModal";
 
-const ExtraPart = [
-  { label: "Adding Appointment", type: 0 },
-  { label: "Viewing Appointment", type: 1 },
-];
+// const ExtraPart = [
+//   { label: "Adding Appointment", type: 0 },
+//   { label: "Viewing Appointment", type: 1 },
+// ];
 
 const PatientDetailsScreen = (props) => {
   const [currentPatient, setCurrentPatient] = useState(false);
   const [currentAppointments, setCurrentAppointments] = useState(false);
   const [appointmentToView, setAppointmentToView] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [doctorsModalIsOn, setDoctorsModalIsOn] = useState(false);
+  const [serviceModalIsOn, setServiceModalIsOn] = useState(false);
 
   const [selectedExtraType, setSelectedExtraType] = useState(-1);
   const [newAppointment, setNewAppointment] = useState(false);
 
   const id = props.match.params.id;
   const AllPateints = useSelector((state) => state.patients);
+  const doctors = useSelector((state) => state.features.admins);
+  const services = useSelector((state) => state.features.services);
 
   const setUpCurrentPatient = () => {
     let findCurrentPatient = AllPateints.patients.find((a) => a.id === id);
@@ -63,11 +70,19 @@ const PatientDetailsScreen = (props) => {
     let dt = {
       doctorId: "oh2brPypbRNE1nPXef1KTrkMYkD2",
       date: moment().valueOf(),
-      setvice: [],
+      services: [services[0]],
       numberId: id,
     };
 
     setNewAppointment(dt);
+  };
+
+  const toggleUpDoctorsModal = () => {
+    setDoctorsModalIsOn(!doctorsModalIsOn);
+  };
+
+  const toggleServiceModal = () => {
+    setServiceModalIsOn(!serviceModalIsOn);
   };
 
   const onChangeNewAppointmentData = (type, val) => {
@@ -79,7 +94,24 @@ const PatientDetailsScreen = (props) => {
     if (type === 1) {
       dt.note = val;
     }
+    if (type === 2) {
+      dt.doctorId = val;
+    }
+    if (type === 3) {
+      let check = dt.services.find((a) => a.id === val.id);
+      let serArr = dt.services || [];
 
+      if (!check) {
+        serArr.push(val);
+      } else {
+        serArr = [];
+        dt.services.forEach((sv) => {
+          if (sv.id !== val.id) {
+            serArr.push(sv);
+          }
+        });
+      }
+    }
     setNewAppointment({ ...dt });
   };
 
@@ -94,6 +126,29 @@ const PatientDetailsScreen = (props) => {
     }
     if (type === 1) {
       dt.note = val;
+    }
+    if (type === 2) {
+      dt.doctorId = val;
+    }
+    if (type === 3) {
+      let check = dt.services.find((a) => a.id === val.id);
+      let serArr = dt.services || [];
+
+      if (!check) {
+        serArr.push(val);
+      } else {
+        if (serArr.length === 1) {
+          return;
+        }
+        serArr = [];
+        dt.services.forEach((sv) => {
+          if (sv.id !== val.id) {
+            serArr.push(sv);
+          }
+        });
+      }
+
+      dt.services = serArr;
     }
 
     setAppointmentToView(dt);
@@ -111,8 +166,35 @@ const PatientDetailsScreen = (props) => {
     <ScrollView
       style={{ flex: 1, backgroundColor: Colors.lightBackgroundColor }}
     >
-      {currentPatient && currentAppointments && (
+      {currentPatient && currentAppointments && doctors && services && (
         <View style={{ width: "100%", padding: 20, marginBottom: 50 }}>
+          {selectedExtraType !== -1 && (
+            <Modal isVisible={doctorsModalIsOn}>
+              <SelectDoctorsModal
+                doctors={doctors}
+                selectedExtraType={selectedExtraType}
+                newAppointment={newAppointment}
+                appointmentToView={appointmentToView}
+                onChangeNewAppointmentData={onChangeNewAppointmentData}
+                onChangeAppointmentData={onChangeAppointmentData}
+                toggleUpDoctorsModal={toggleUpDoctorsModal}
+              />
+            </Modal>
+          )}
+
+          {selectedExtraType !== -1 && (
+            <Modal isVisible={serviceModalIsOn}>
+              <SelectServiceModal
+                services={services}
+                selectedExtraType={selectedExtraType}
+                newAppointment={newAppointment}
+                appointmentToView={appointmentToView}
+                onChangeNewAppointmentData={onChangeNewAppointmentData}
+                onChangeAppointmentData={onChangeAppointmentData}
+                toggleServiceModal={toggleServiceModal}
+              />
+            </Modal>
+          )}
           <Upper
             currentPatient={currentPatient}
             appointmentToView={appointmentToView}
@@ -133,8 +215,11 @@ const PatientDetailsScreen = (props) => {
             onChangeNewAppointmentData={onChangeNewAppointmentData}
             onChangeAppointmentData={onChangeAppointmentData}
             patientId={id}
+            doctors={doctors}
             loading={loading}
             changeLoading={changeLoading}
+            toggleUpDoctorsModal={toggleUpDoctorsModal}
+            toggleServiceModal={toggleServiceModal}
           />
         </View>
       )}

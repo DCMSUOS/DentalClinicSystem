@@ -17,6 +17,8 @@ const ExtraPart = ({
   onViwingAppointment,
   loading,
   changeLoading,
+  toggleUpDoctorsModal,
+  toggleServiceModal,
 }) => {
   if (selectedExtraType !== -1)
     return (
@@ -29,6 +31,8 @@ const ExtraPart = ({
         onViwingAppointment={onViwingAppointment}
         loading={loading}
         changeLoading={changeLoading}
+        toggleUpDoctorsModal={toggleUpDoctorsModal}
+        toggleServiceModal={toggleServiceModal}
       />
     );
 

@@ -31,6 +31,8 @@ const AddAppointment = ({
   onViwingAppointment,
   loading,
   changeLoading,
+  toggleUpDoctorsModal,
+  toggleServiceModal,
 }) => {
   const [doctor, setDoctor] = useState(false);
   const allAdmins = useSelector((state) => state.features.admins);
@@ -38,9 +40,7 @@ const AddAppointment = ({
   const setUpDoctor = () => {
     let currDoctor;
 
-    currDoctor = allAdmins.find(
-      (a) => a.type === "Doctor" && a.id === data.doctorId
-    );
+    currDoctor = allAdmins.find((a) => a.id === data.doctorId);
 
     if (currDoctor) setDoctor(currDoctor);
   };
@@ -63,7 +63,6 @@ const AddAppointment = ({
         date: moment(data.date).valueOf(),
         sitType: 0,
         isDeleted: false,
-        services: [{ id: "O4GsvLBQ" }],
         patientId: patientId,
       };
 
@@ -166,11 +165,17 @@ const AddAppointment = ({
             }
           />
           <ButtonContainer
+            onPress={toggleUpDoctorsModal}
             type={1}
             value={!doctor ? "Select" : `${doctor.firstname}`}
             label={"Doctor"}
           />
-          <ButtonContainer type={2} value={"test"} label={"Service"} />
+          <ButtonContainer
+            type={2}
+            value={data.services.length + " Services"}
+            label={"Service"}
+            onPress={toggleServiceModal}
+          />
           <ChoiseContainer
             selectedExtraType={selectedExtraType}
             data={data}
@@ -322,8 +327,10 @@ const AppointmentDate = ({ type, onChangeNewAppointmentData, value }) => {
   );
 };
 
-const ButtonContainer = ({ label, value }) => {
-  const onChange = () => {};
+const ButtonContainer = ({ label, value, onPress }) => {
+  const onChange = () => {
+    onPress();
+  };
   return (
     <View style={styles.index}>
       <Text
@@ -336,6 +343,7 @@ const ButtonContainer = ({ label, value }) => {
         {label}
       </Text>
       <TouchableOpacity
+        onPress={onChange}
         style={{
           backgroundColor: Colors.lightBackgroundColor,
           paddingHorizontal: 20,
@@ -348,6 +356,7 @@ const ButtonContainer = ({ label, value }) => {
             fontFamily: fontFamily("en"),
             color: "#292929",
             opacity: 0.7,
+            textTransform: "capitalize",
           }}
         >
           {value}

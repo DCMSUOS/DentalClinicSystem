@@ -11,6 +11,7 @@ import Colors from "../../../../assets/color/Colors";
 import { fontFamily } from "../../../../assets/FontStyleConfig";
 import moment from "moment";
 import ExtraPart from "./ExtraPart";
+import { useSelector } from "react-redux";
 
 const { height, width } = Dimensions.get("window");
 
@@ -32,6 +33,8 @@ const Schedule = ({
   patientId,
   loading,
   changeLoading,
+  toggleUpDoctorsModal,
+  toggleServiceModal,
 }) => {
   const [filterType, setFilterType] = useState(1);
   const [appointments, setAppointments] = useState(false);
@@ -98,6 +101,8 @@ const Schedule = ({
         onViwingAppointment={onViwingAppointment}
         loading={loading}
         changeLoading={changeLoading}
+        toggleUpDoctorsModal={toggleUpDoctorsModal}
+        toggleServiceModal={toggleServiceModal}
       />
     </View>
   );
@@ -207,6 +212,20 @@ const AppointmentsContainer = ({
 const AppointmentItem = ({ appointment, onViwingAppointment, loading }) => {
   const [currentDoctor, setCurrentDoctor] = useState(false);
 
+  const allAdmins = useSelector((state) => state.features.admins);
+
+  const setUpDoctor = () => {
+    let currDoctor;
+
+    currDoctor = allAdmins.find((a) => a.id === appointment.doctorId);
+
+    if (currDoctor) setCurrentDoctor(currDoctor);
+  };
+
+  useEffect(() => {
+    if (appointment) setUpDoctor();
+  }, [appointment]);
+
   const onPress = () => {
     onViwingAppointment(appointment.id);
   };
@@ -234,7 +253,7 @@ const AppointmentItem = ({ appointment, onViwingAppointment, loading }) => {
         label={"Date"}
         value={moment(appointment.date).format(`DD MMM'YY`)}
       />
-      <LabelIndex label={"Dentist"} value="Drg. alla" />
+      <LabelIndex label={"Dentist"} value={currentDoctor.firstname} />
       <LabelIndex
         label={"Situation"}
         value={
@@ -280,6 +299,7 @@ const LabelIndex = ({ label, value, color }) => {
           color: color || "#292929",
           fontSize: 20,
           opacity: 0.9,
+          textTransform: "capitalize",
         }}
       >
         {value}
