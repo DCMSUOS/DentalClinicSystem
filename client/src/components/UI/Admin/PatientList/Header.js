@@ -10,6 +10,7 @@ import React from "react";
 
 import { fontFamily, fontSize } from "../../../../assets/FontStyleConfig";
 import Colors from "../../../../assets/color/Colors";
+import { useSelector } from "react-redux";
 
 const { height, width } = Dimensions.get("window");
 
@@ -67,13 +68,15 @@ const UpperRightContainer = ({
   onChangeSearchInput,
   searchInput,
 }) => {
+  const { type } = useSelector((state) => state.authentication.user);
+
   return (
     <View style={{ flexDirection: "row", alignItems: "center", width: "20%" }}>
       <Search
         onChangeSearchInput={onChangeSearchInput}
         searchInput={searchInput}
       />
-      <AddButtons onPressAddPateint={onPressAddPateint} />
+      {type === "Admin" && <AddButtons onPressAddPateint={onPressAddPateint} />}
     </View>
   );
 };

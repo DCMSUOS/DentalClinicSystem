@@ -54,8 +54,7 @@ export const Routes = (props) => {
                   path="/"
                   component={PrivateRouterComponent}
                 />
-                {User.user.type === "Admin" && <AdminRouters />}
-                {User.user.type === "Doctor" && <DoctorRouters />}
+                <AdminRouters />
               </Switch>
               <Route
                 component={(props) => {

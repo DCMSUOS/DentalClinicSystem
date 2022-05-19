@@ -13,7 +13,6 @@ import Colors from "../assets/color/Colors";
 
 const Navigation = (props) => {
   const dispatch = useDispatch();
-  const { type } = useSelector((state) => state.authentication.user);
 
   const onLogout = async () => {
     try {
@@ -29,8 +28,7 @@ const Navigation = (props) => {
   return (
     <View style={styles.container}>
       <BadgeContainer />
-      {type === "Admin" && <AdminNavigation />}
-      {type === "Doctor" && <DoctorsNavigation />}
+      <AdminNavigation />
 
       <div style={{ position: "relative", flex: 1 }}>
         <LogoutButton onLogout={onLogout} />
@@ -58,7 +56,7 @@ const BadgeContainer = () => {
             width: 40,
             alignSelf: "center",
             tintColor: "#fff",
-            transform: [{scale: 1.4}]
+            transform: [{ scale: 1.4 }],
           }}
         />
       </View>

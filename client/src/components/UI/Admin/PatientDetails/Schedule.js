@@ -63,7 +63,9 @@ const Schedule = ({
 
     dt.sort((a, b) => a.date - b.date);
 
-    setAppointments(dt);
+    let arr = dt.filter((a) => !a.isDeleted);
+
+    setAppointments(() => [...arr]);
   };
 
   useEffect(() => {
@@ -171,6 +173,7 @@ const AppointmentsContainer = ({
   onViwingAppointment,
   loading,
 }) => {
+  console.log(appointments.length);
   return (
     <View style={styles.appointmentsContainer}>
       <ScrollView

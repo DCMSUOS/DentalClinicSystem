@@ -22,6 +22,7 @@ const CreateUser = (props) => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
+  const [image, setImage] = useState("");
   const [password, setPassword] = useState("");
   const [type, setType] = useState("");
 
@@ -29,6 +30,10 @@ const CreateUser = (props) => {
 
   const onChangeEmail = (val) => {
     setEmail(val);
+  };
+
+  const onChangeImage = (val) => {
+    setImage(val);
   };
 
   const onChangePassword = (val) => {
@@ -50,7 +55,14 @@ const CreateUser = (props) => {
   const dispatch = useDispatch();
   const onPressCreateUser = async () => {
     let typeLabel = accountTypes.find((a) => a.type === type);
-    let userData = { email, password, firstname, lastname };
+    let userData = {
+      email,
+      password,
+      firstname,
+      lastname,
+      image,
+      type: typeLabel.label,
+    };
 
     try {
       await dispatch(createUser(userData));
@@ -63,8 +75,9 @@ const CreateUser = (props) => {
     onChangeEmail(data.email);
     onChangeFirstName(data.firstname);
     onChangeLastName(data.lastname);
+    onChangeImage(data.image);
     let typeLabel = accountTypes.find((a) => a.label === data.type);
-    console.log(typeLabel)
+
     if (typeLabel) onChangeType(typeLabel.type);
   };
 
@@ -100,6 +113,12 @@ const CreateUser = (props) => {
           />
           <TextInput
             style={styles.input}
+            placeholder="Image"
+            onChangeText={onChangeImage}
+            value={image}
+          />
+          <TextInput
+            style={styles.input}
             placeholder="Email"
             onChangeText={onChangeEmail}
             value={email}
@@ -111,6 +130,7 @@ const CreateUser = (props) => {
             onChangeText={onChangePassword}
             value={password}
           />
+
           <AccountType
             accountTypes={accountTypes}
             type={type}

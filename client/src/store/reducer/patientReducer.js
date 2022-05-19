@@ -17,10 +17,10 @@ const authenticationReducer = (state = initialState, action) => {
         patients: action.data,
       };
     case "SET_APPOINTMENTS":
-      let allApp = action.data.filter((a) => !a.isDeleted);
+      //let allApp = action.data.filter((a) => !a.isDeleted);
       return {
         ...state,
-        appointments: allApp,
+        appointments: action.data,
       };
     case "UPDATE_DURATION": {
       return {

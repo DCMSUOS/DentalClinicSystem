@@ -41,7 +41,7 @@ const PatientDetailsScreen = (props) => {
     if (!findCurrentAppointMents) {
       findCurrentAppointMents = [];
     }
-    setCurrentAppointments(findCurrentAppointMents);
+    setCurrentAppointments(() => [...findCurrentAppointMents]);
   };
 
   const onPressAddAppointment = () => {
@@ -49,15 +49,20 @@ const PatientDetailsScreen = (props) => {
   };
 
   const onViwingAppointment = (id) => {
-    onChangeSelectedExtraType(1);
-    let curr = currentAppointments.find((a) => a.id === id);
-    setAppointmentToView(curr);
+    if (id) {
+      onChangeSelectedExtraType(1);
+      let curr = currentAppointments.find((a) => a.id === id);
+      setAppointmentToView(curr);
+    } else {
+      setSelectedExtraType(-1);
+      setAppointmentToView(false);
+    }
   };
 
   useEffect(() => {
     if (AllPateints && AllPateints.appointments && AllPateints.patients)
       setUpCurrentPatient();
-  }, [AllPateints, id]);
+  }, [AllPateints, id, AllPateints.appointments]);
 
   const onChangeSelectedExtraType = (val) => {
     setSelectedExtraType(val);

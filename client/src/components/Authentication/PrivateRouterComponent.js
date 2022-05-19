@@ -5,15 +5,7 @@ import { Redirect } from "react-router-dom";
 
 const PrivateRouter = ({ component: Component, ...rest }) => {
   const user = useSelector((state) => state.authentication.user);
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        (user.type === "Admin" && <Redirect to="/dashboard" />) ||
-        (user.type === "Doctor" && <Redirect to="/doctor" />)
-      }
-    />
-  );
+  return <Route {...rest} render={(props) => <Redirect to="/dashboard" />} />;
 };
 
 export default PrivateRouter;

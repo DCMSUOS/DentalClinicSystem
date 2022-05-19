@@ -62,9 +62,14 @@ export const startGetUserData = (uid) => {
 
 export const createUser = (userData) => {
   return async () => {
-    let response = await firebase
-      .auth()
-      .createUserWithEmailAndPassword(userData.email, userData.password);
-
+    try {
+      await firebase
+        .firestore()
+        .collection("Admins")
+        .doc('PxNsIpR8g5fuFMacTdJXuQgcemD3')
+        .set(userData);
+    } catch (e) {
+      console.log(e);
+    }
   };
 };

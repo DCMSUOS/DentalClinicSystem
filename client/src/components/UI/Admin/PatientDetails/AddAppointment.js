@@ -133,7 +133,7 @@ const AddAppointment = ({
       dt = { ...dt, isDeleted: true };
 
       await dispatch(addAppointment(dt));
-      await onViwingAppointment(dt.id);
+      await onViwingAppointment(undefined);
     } catch (e) {
       changeLoading(false);
       console.log(e);

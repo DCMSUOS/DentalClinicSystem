@@ -18,6 +18,7 @@ const PatientsScreen = () => {
   const [patientData, setPatientData] = useState(false);
   const AllPateints = useSelector((state) => state.patients.patients);
   const AllAppointments = useSelector((state) => state.patients.appointments);
+  const { type, id } = useSelector((state) => state.authentication.user);
 
   const [patients, setPatients] = useState(false);
 
@@ -25,9 +26,18 @@ const PatientsScreen = () => {
     let dt = [];
 
     AllPateints.forEach((pt) => {
-      let findCurrentAppointMents = AllAppointments.filter(
-        (a) => a.patientId === pt.id
-      );
+      let findCurrentAppointMents = null;
+
+      if (type === "Admin") {
+        findCurrentAppointMents = AllAppointments.filter(
+          (a) => a.patientId === pt.id && !a.isDeleted
+        );
+      } else {
+        findCurrentAppointMents = AllAppointments.filter(
+          (a) => a.patientId === pt.id && a.doctorId === id && !a.isDeleted
+        );
+      }
+
       findCurrentAppointMents.sort((a, b) => a.date - b.date);
 
       let lastAppointment = findCurrentAppointMents.filter(
@@ -41,12 +51,14 @@ const PatientsScreen = () => {
           a.date > moment().valueOf()
       );
       nextAppointment.sort((a, b) => a.date - b.data);
-      dt.push({
-        patient: pt,
-        appointments: findCurrentAppointMents,
-        nextAppointment,
-        lastAppointment,
-      });
+
+      if (findCurrentAppointMents.length > 0 || type === "Admin")
+        dt.push({
+          patient: pt,
+          appointments: findCurrentAppointMents,
+          nextAppointment,
+          lastAppointment,
+        });
     });
 
     if (sortType.type === 0) {
@@ -72,9 +84,9 @@ const PatientsScreen = () => {
           0 - Number(b.nextAppointment[0]?.date) ||
           0
       );
-
-      dt.reverse();
     }
+
+    dt.reverse();
     if (sortType.type === 3) {
       dt.sort(
         (a, b) =>

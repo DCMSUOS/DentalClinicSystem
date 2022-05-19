@@ -6,18 +6,7 @@ import { Redirect } from "react-router-dom";
 const AdminRouter = ({ component: Component, ...rest }) => {
   const userType = useSelector((state) => state.authentication.user.type);
 
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        userType === "Admin" ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to="/admin" />
-        )
-      }
-    />
-  );
+  return <Route {...rest} render={(props) => <Component {...props} />} />;
 };
 
 export default AdminRouter;
